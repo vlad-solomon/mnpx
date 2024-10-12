@@ -10,19 +10,19 @@ export default function Map({ lat, long }) {
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
             center: [long, lat],
-            zoom: 13,
+            zoom: 12.5,
         });
 
         return () => {
             mapRef.current.remove();
         };
-    }, []);
+    }, [lat, long]);
 
     return (
         <div
             ref={mapContainerRef}
             id="map-container"
-            className="h-full w-full absolute bg-red-500 top-0 left-0"
+            className="h-full w-full absolute bg-stone-900 top-0 left-0"
         ></div>
     );
 }

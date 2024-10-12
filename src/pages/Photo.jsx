@@ -1,7 +1,8 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useData } from "../hooks/useData";
 import { urlFor } from "../../sanity";
 import Map from "../components/Map";
+import Controls from "../components/Controls";
 
 //todo shadows
 
@@ -14,10 +15,16 @@ export default function Photo() {
     }
 
     const photo = data.find((item) => item.slug.current === slug);
-    console.log(photo);
+    const prevPhoto = data.find(
+        (_, index, arr) => arr[index - 1]?.slug.current === slug
+    );
+    const nextPhoto = data.find(
+        (_, index, arr) => arr[index + 1]?.slug.current === slug
+    );
 
     return (
         <div className="flex flex-col gap-5 py-6">
+            <Controls next={nextPhoto} prev={prevPhoto} />
             <div className="bg-stone-900 border border-stone-500/50 rounded-lg overflow-hidden">
                 <img src={urlFor(photo.image.asset._ref).url()} />
             </div>
@@ -32,14 +39,17 @@ export default function Photo() {
                 </div>
             </div>
             <div className="flex gap-4 flex-wrap font-mono">
-                {photo.tags.split(";").map((tag) => (
-                    <span
-                        key={tag}
-                        className="py-1 px-4 bg-stone-900 rounded-lg border border-stone-500/50"
-                    >
-                        {tag}
-                    </span>
-                ))}
+                {photo.tags
+                    .split(";")
+                    .filter((tag) => tag)
+                    .map((tag) => (
+                        <span
+                            key={tag}
+                            className="py-1 px-4 bg-stone-900 rounded-lg border border-stone-500/50"
+                        >
+                            {tag}
+                        </span>
+                    ))}
             </div>
         </div>
     );
