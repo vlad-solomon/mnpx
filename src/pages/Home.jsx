@@ -11,7 +11,6 @@ export default function Home() {
 
     return (
         <>
-            <div className="bg-red-500 size-5"></div>
             <ol>
                 {data.map((photo) => (
                     <Link
@@ -19,7 +18,7 @@ export default function Home() {
                         to={`p/${photo.slug.current}`}
                     >
                         <li>
-                            <span className="text-red-500 font-mono text-xl">
+                            <span className="text-blue-500 font-mono text-xl">
                                 {photo.slug.current}
                             </span>
                             <br />

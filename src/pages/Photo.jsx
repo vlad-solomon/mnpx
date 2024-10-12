@@ -14,7 +14,7 @@ export default function Photo() {
 
     return (
         <>
-            <span className="text-red-500">{photo.slug.current}</span>
+            <span className="text-blue-500">{photo.slug.current}</span>
             <img src={urlFor(photo.image.asset._ref).width(400).url()} />
         </>
     );

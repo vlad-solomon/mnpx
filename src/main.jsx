@@ -4,21 +4,28 @@ import { DataProvider } from "./context/DataContext";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
+import BaseLayout from "./layouts/BaseLayout";
 import Home from "./pages/Home";
 import Photo from "./pages/Photo";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Home />,
-    },
-    {
-        path: "/p/:slug",
-        element: <Photo />,
+        element: <BaseLayout />,
+        children: [
+            {
+                path: "/",
+                element: <Home />,
+            },
+            {
+                path: "/p/:slug",
+                element: <Photo />,
+            },
+        ],
     },
 ]);
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.querySelector("body")).render(
     <StrictMode>
         <DataProvider>
             <RouterProvider router={router} />
