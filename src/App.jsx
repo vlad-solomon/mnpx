@@ -1,32 +1,25 @@
-import { useEffect, useState } from "react";
 import "./App.css";
-import { getPhotos, urlFor } from "../sanity";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { DataProvider } from "./assets/context/DataContext";
 
-function App() {
-    const [data, setData] = useState([]);
+import Home from "./assets/pages/Home";
+import Photo from "./assets/pages/Photo";
 
-    useEffect(() => {
-        async function fetchPhotos() {
-            const data = await getPhotos();
-            setData(data);
-        }
-        fetchPhotos();
-    }, []);
+export default function App() {
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <Home />,
+        },
+        {
+            path: "/photo/:slug",
+            element: <Photo />,
+        },
+    ]);
 
     return (
-        <ol>
-            {data.map((photo) => (
-                <li key={photo.slug.current}>
-                    <span>{photo.slug.current}</span>
-                    <br />
-                    <img
-                        src={urlFor(photo.image.asset._ref).width(100).url()}
-                        alt={photo.slug.current}
-                    />
-                </li>
-            ))}
-        </ol>
+        <DataProvider>
+            <RouterProvider router={router} />
+        </DataProvider>
     );
 }
-
-export default App;
