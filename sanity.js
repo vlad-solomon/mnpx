@@ -10,7 +10,7 @@ export const client = createClient({
 
 export async function getPhotos() {
     const photos = await client.fetch(
-        "*[_type == 'photo' && archived == false]{location{lng,lat},image{asset{_ref}},slug{current},tags,date}"
+        "*[_type == 'photo' && archived == false] | order(date desc){location{lng,lat},image{asset{_ref}},slug{current},tags,date}"
     );
     return photos;
 }
