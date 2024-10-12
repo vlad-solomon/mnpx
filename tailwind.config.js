@@ -2,7 +2,12 @@
 export default {
     content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
     theme: {
-        extend: {},
+        extend: {
+            boxShadow: {
+                "custom-drop-shadow":
+                    "0 25px 50px 0 rgba(0,0,0,0.55), inset 0 0 100px 50px rgba(0,0,0,0.55)",
+            },
+        },
     },
     plugins: [],
 };
