@@ -12,10 +12,7 @@ export default function Home() {
     return (
         <ol>
             {data.map((photo) => (
-                <Link
-                    key={photo.slug.current}
-                    to={`photo/${photo.slug.current}`}
-                >
+                <Link key={photo.slug.current} to={`p/${photo.slug.current}`}>
                     <li>
                         <span>{photo.slug.current}</span>
                         <br />
