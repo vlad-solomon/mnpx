@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useData } from "../hooks/useData";
 import { urlFor } from "../../sanity";
+import Map from "../components/Map";
 
 //todo shadows
 
@@ -24,8 +25,9 @@ export default function Photo() {
                 <span>{photo.date}</span>
                 <span>{photo.tags.split(";")[0]}</span>
             </div>
-            <div className="bg-stone-900 flex items-end p-4 text-lg border border-stone-500/50 rounded-lg w-full aspect-square">
-                <div className="bg-stone-900 w-full p-4 border border-stone-500/50 rounded-md">
+            <div className="relative overflow-hidden bg-stone-900 flex items-end p-4 text-lg border border-stone-500/50 rounded-lg w-full aspect-square">
+                <Map lat={photo.location.lat} long={photo.location.lng} />
+                <div className="relative bg-stone-900 w-full p-4 border border-stone-500/50 rounded-md">
                     {photo.location.lat} {photo.location.lng}
                 </div>
             </div>
