@@ -1,10 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { DataProvider } from "./assets/context/DataContext";
+import { DataProvider } from "./context/DataContext";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./index.css";
 
-import Home from "./assets/pages/Home.jsx";
-import Photo from "./assets/pages/Photo.jsx";
+import Home from "./pages/Home";
+import Photo from "./pages/Photo";
 
 const router = createBrowserRouter([
     {

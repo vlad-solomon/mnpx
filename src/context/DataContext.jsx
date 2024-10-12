@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getPhotos } from "../../../sanity";
+import { getPhotos } from "../../sanity";
 
 export const DataContext = createContext(null);
 
