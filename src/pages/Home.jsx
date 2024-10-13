@@ -1,7 +1,9 @@
 import { useData } from "../hooks/useData";
 import { urlFor } from "../../sanity";
-import { Link } from "react-router-dom";
 import Column from "../components/Column";
+import Frame from "../components/Frame";
+
+//todo rename PhotoBig to Showcase or something
 
 export default function Home() {
     const { data, isLoading } = useData();
@@ -10,21 +12,18 @@ export default function Home() {
         return "loading...";
     }
 
-    console.log(data);
-
     return (
-        <div className="flex gap-4 max-w-[1000px] m-auto h-[100dvh]">
+        <div className="flex gap-8 max-w-[800px] m-auto h-[100dvh]">
             {[0, 1, 2].map((column) => (
                 <Column key={column}>
                     {data
                         .filter((_, index) => index % 3 === column)
                         .map((photo) => (
-                            <Link
+                            <Frame
                                 key={photo.slug.current}
-                                to={`p/${photo.slug.current}`}
-                            >
-                                <img src={urlFor(photo.image.asset._ref)} />
-                            </Link>
+                                slug={photo.slug.current}
+                                src={urlFor(photo.image.asset._ref)}
+                            />
                         ))}
                 </Column>
             ))}

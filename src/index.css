@@ -2,14 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* body {
-    background-color: #000;
-    background-image: url(assets/images/bg.png);
-    background-size: cover;
-    height: 100dvh;
-    color: white;
-} */
-
 * {
     user-select: none;
 }
@@ -20,7 +12,6 @@ body {
     background-size: cover;
 }
 
-/* #root {
-    min-height: 100dvh;
-    background-color: red;
-} */
+::-webkit-scrollbar {
+    display: none;
+}
