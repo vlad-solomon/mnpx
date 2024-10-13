@@ -1,11 +1,7 @@
-import { Link, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { useData } from "../hooks/useData";
-import Map from "../components/Map";
 import Controls from "../components/Controls";
 import PhotoBig from "../components/PhotoBig";
-import { useEffect } from "react";
-import { urlFor } from "../../sanity";
 
 export default function Photo() {
     const { slug } = useParams();
@@ -24,7 +20,7 @@ export default function Photo() {
     );
 
     return (
-        <div className="flex flex-col max-w-[550px] m-auto h-[100dvh] justify-center">
+        <div className="flex flex-col max-w-[510px] m-auto h-[100dvh] justify-center">
             <Controls next={nextPhoto} prev={prevPhoto} />
             <PhotoBig photo={photo} />
         </div>
