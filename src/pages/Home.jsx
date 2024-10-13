@@ -1,6 +1,7 @@
 import { useData } from "../hooks/useData";
 import { urlFor } from "../../sanity";
 import { Link } from "react-router-dom";
+import Column from "../components/Column";
 
 export default function Home() {
     const { data, isLoading } = useData();
@@ -9,29 +10,24 @@ export default function Home() {
         return "loading...";
     }
 
+    console.log(data);
+
     return (
-        <>
-            <ol>
-                {data.map((photo) => (
-                    <Link
-                        key={photo.slug.current}
-                        to={`p/${photo.slug.current}`}
-                    >
-                        <li>
-                            <span className="text-blue-500 font-mono text-xl">
-                                {photo.slug.current}
-                            </span>
-                            <br />
-                            <img
-                                src={urlFor(photo.image.asset._ref)
-                                    .width(100)
-                                    .url()}
-                                alt={photo.slug.current}
-                            />
-                        </li>
-                    </Link>
-                ))}
-            </ol>
-        </>
+        <div className="flex gap-4 max-w-[1000px] m-auto h-[100dvh]">
+            {[0, 1, 2].map((column) => (
+                <Column key={column}>
+                    {data
+                        .filter((_, index) => index % 3 === column)
+                        .map((photo) => (
+                            <Link
+                                key={photo.slug.current}
+                                to={`p/${photo.slug.current}`}
+                            >
+                                <img src={urlFor(photo.image.asset._ref)} />
+                            </Link>
+                        ))}
+                </Column>
+            ))}
+        </div>
     );
 }

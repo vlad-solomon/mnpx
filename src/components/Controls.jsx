@@ -3,8 +3,6 @@ import Prev from "../assets/images/prev.png";
 import Next from "../assets/images/next.png";
 import { useEffect } from "react";
 
-//todo keyboard events
-
 export default function Controls({ prev, next }) {
     const navigate = useNavigate();
 
