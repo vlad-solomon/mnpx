@@ -13,16 +13,16 @@ export default function PhotoBig({ src, alt }) {
             <img
                 src={tapeOne}
                 alt="tape-1"
-                className="absolute bottom-[-58px] right-[-80px]"
+                className="absolute bottom-[-58px] right-[-80px] pointer-events-none"
             />
             <img
                 src={tapeTwo}
-                className="absolute top-1/3 left-[-130px]"
+                className="absolute top-[60px] left-[-130px] pointer-events-none"
                 alt="tape-2"
             />
             <img
                 src={tapeThree}
-                className="absolute top-[-52px] right-[-80px]"
+                className="absolute top-[-52px] right-[-80px] pointer-events-none"
                 alt="tape-3"
             />
         </div>

@@ -7,13 +7,13 @@ export default function Controls({ prev, next }) {
         (control, index) =>
             control && (
                 <Link
-                    className={`fixed top-1/2 -translate-y-1/2 ${
-                        index === 0 ? "left-0" : "right-0"
-                    } size-10 bg-stone-900 flex items-center justify-center rounded-full`}
+                    className={`fixed top-1/2 -translate-y-1/2 text-lg tracking-[.25em] text-white/50 font-light hover:text-white ${
+                        index === 0 ? "left-0 -rotate-90" : "right-0 rotate-90"
+                    }`}
                     key={control.slug.current}
                     to={`/p/${control.slug.current}`}
                 >
-                    {index === 0 ? "<" : ">"}
+                    {index === 0 ? "prev" : "next"}
                 </Link>
             )
     );
