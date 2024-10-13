@@ -9,6 +9,7 @@
 body {
     background-color: #000;
     background-image: url(assets/images/bg.png);
+    background-position: center;
     background-size: cover;
 }
 

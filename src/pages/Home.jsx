@@ -39,7 +39,7 @@ export default function Home() {
         <div className="flex gap-8 max-w-[800px] m-auto h-[100dvh]">
             {Array.from({ length: columns }, (_, index) => index).map(
                 (column) => (
-                    <Column key={column}>
+                    <Column key={column} id={`column-${column}`}>
                         {data
                             .filter((_, index) => index % columns === column)
                             .map((photo) => (

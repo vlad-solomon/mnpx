@@ -11,7 +11,7 @@ export default function PhotoBig({ photo }) {
             className={`group relative shadow-custom-drop-shadow`}
             style={{ rotate: `${getRandom(-1, 1)}deg` }}
         >
-            <div className="absolute flex flex-col -bottom-8 left-0 text-white/50 opacity-0 pointer-events-none group-hover:opacity-100 drop-shadow-sm font-mono">
+            {/* <div className="absolute flex flex-col -bottom-8 left-0 text-white/50 opacity-0 pointer-events-none group-hover:opacity-100 drop-shadow-sm font-mono">
                 <span>
                     {tags.split(";")[0]} {date}
                 </span>
@@ -24,23 +24,25 @@ export default function PhotoBig({ photo }) {
                     .map((tag) => (
                         <span key={tag}>{tag}</span>
                     ))}
-            </div>
+            </div> */}
             <img src={urlFor(image.asset._ref).url()} alt={slug.current} />
-            <img
-                src={tapeOne}
-                alt="tape-1"
-                className="absolute bottom-[-58px] right-[-80px] pointer-events-none"
-            />
-            <img
-                src={tapeTwo}
-                className="absolute top-[60px] left-[-130px] pointer-events-none"
-                alt="tape-2"
-            />
-            <img
-                src={tapeThree}
-                className="absolute top-[-52px] right-[-80px] pointer-events-none"
-                alt="tape-3"
-            />
+            <div className="hidden md:block">
+                <img
+                    src={tapeOne}
+                    alt="tape-1"
+                    className="absolute bottom-[-58px] right-[-80px] pointer-events-none"
+                />
+                <img
+                    src={tapeTwo}
+                    className="absolute top-[60px] left-[-130px] pointer-events-none"
+                    alt="tape-2"
+                />
+                <img
+                    src={tapeThree}
+                    className="absolute top-[-52px] right-[-80px] pointer-events-none"
+                    alt="tape-3"
+                />
+            </div>
         </div>
     );
 }
