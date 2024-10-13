@@ -8,10 +8,10 @@ import Frame from "../components/Frame";
 
 export default function Home() {
     const { data, isLoading } = useData();
-    const [columns, setColumns] = useState(3);
+    const [columns, setColumns] = useState(1);
 
     useEffect(() => {
-        const breakpoints = [300, 500, 700];
+        const breakpoints = [400, 610, 800];
 
         const handleResize = () => {
             const size = window.innerWidth;
@@ -31,9 +31,7 @@ export default function Home() {
         };
     }, [columns]);
 
-    if (isLoading) {
-        return "loading...";
-    }
+    if (isLoading) return;
 
     return (
         <div className="flex gap-8 max-w-[800px] m-auto h-[100dvh]">

@@ -29,7 +29,7 @@ export default function Controls({ prev, next }) {
         (control, index) =>
             control && (
                 <Link
-                    className={`hidden md:block fixed z-50 top-1/2 -translate-y-1/2 text-lg tracking-[.25em] text-white/50 font-light hover:text-white font-mono ${
+                    className={`hidden lg:block fixed z-50 top-1/2 -translate-y-1/2 text-lg tracking-[.25em] text-white/50 font-light hover:text-white font-mono ${
                         index === 0 ? "left-0 -rotate-90" : "right-0 rotate-90"
                     }`}
                     key={control.slug.current}

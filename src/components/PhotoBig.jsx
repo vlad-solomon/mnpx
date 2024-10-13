@@ -5,26 +5,12 @@ import tapeThree from "../assets/images/3.png";
 import getRandom from "../utils/getRandom";
 
 export default function PhotoBig({ photo }) {
-    const { date, image, slug, tags } = photo;
+    const { image, slug } = photo;
     return (
         <div
             className={`group relative shadow-custom-drop-shadow`}
             style={{ rotate: `${getRandom(-1, 1)}deg` }}
         >
-            {/* <div className="absolute flex flex-col -bottom-8 left-0 text-white/50 opacity-0 pointer-events-none group-hover:opacity-100 drop-shadow-sm font-mono">
-                <span>
-                    {tags.split(";")[0]} {date}
-                </span>
-            </div>
-            <div className="absolute text-white/50 -top-8 right-0 justify-end flex flex-wrap gap-[0_8px] opacity-0 pointer-events-none group-hover:opacity-100 drop-shadow-sm font-mono">
-                {tags
-                    .split(";")
-                    .slice(2)
-                    .filter((tag) => tag)
-                    .map((tag) => (
-                        <span key={tag}>{tag}</span>
-                    ))}
-            </div> */}
             <img src={urlFor(image.asset._ref).url()} alt={slug.current} />
             <div className="hidden md:block">
                 <img
