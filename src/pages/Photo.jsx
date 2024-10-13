@@ -26,7 +26,7 @@ export default function Photo() {
     return (
         <div className="flex flex-col max-w-[550px] m-auto h-[100dvh] justify-center">
             <Controls next={nextPhoto} prev={prevPhoto} />
-            <PhotoBig src={photo.image.asset._ref} alt={slug} />
+            <PhotoBig photo={photo} />
         </div>
     );
 }
