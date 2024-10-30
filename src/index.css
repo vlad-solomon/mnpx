@@ -6,13 +6,9 @@
     user-select: none;
 }
 
+html,
 body {
-    height: 100dvh;
-    background-color: #000;
-    background-image: url(assets/images/bg.png);
-    background-position: center;
-    background-size: fill;
-    overflow-x: hidden;
+    background-color: #131313;
 }
 
 ::-webkit-scrollbar {
