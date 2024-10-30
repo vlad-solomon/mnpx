@@ -1,8 +1,9 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useData } from "../hooks/useData";
-import Controls from "../components/Controls";
-import PhotoBig from "../components/PhotoBig";
-import Line from "../assets/images/line.png";
+// import Controls from "../components/_Controls";
+// import PhotoBig from "../components/PhotoBig";
+// import Line from "../assets/images/line.png";
+import { urlFor } from "../../sanity";
 
 export default function Photo() {
     const { slug } = useParams();
@@ -22,21 +23,10 @@ export default function Photo() {
     const ratio = w / h;
 
     return (
-        <div className="py-5 min-h-[100dvh] flex flex-col">
-            <Link
-                to="/"
-                className="relative flex items-center justify-center text-lg tracking-[.25em] text-white/50 font-light hover:text-white font-mono"
-            >
-                mnpx
-                <img src={Line} alt="line" className="absolute -top-2" />
-            </Link>
-            <div
-                className="flex flex-col justify-center m-auto h-full"
-                style={{ maxWidth: ratio > 1 ? 750 : 510 }}
-            >
-                <Controls next={nextPhoto} prev={prevPhoto} />
-                <PhotoBig photo={photo} />
+        <>
+            <div className="bg-white/10 sm:border border-white/10 overflow-hidden sm:rounded shadow-md">
+                <img src={urlFor(photo.image.asset._ref)} alt={slug} />
             </div>
-        </div>
+        </>
     );
 }
