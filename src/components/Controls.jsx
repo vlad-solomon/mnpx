@@ -1,10 +1,17 @@
-import { Link, useNavigate } from "react-router-dom";
-import Prev from "../assets/images/prev.png";
-import Next from "../assets/images/next.png";
 import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import curved from "../assets/curved-text.svg";
+import logo from "../assets/logo.png";
 
-export default function Controls({ prev, next }) {
+export default function Controls({ data, slug }) {
     const navigate = useNavigate();
+    const prev = data.find(
+        (_, index, arr) => arr[index - 1]?.slug.current === slug
+    );
+    const next = data.find(
+        (_, index, arr) => arr[index + 1]?.slug.current === slug
+    );
 
     useEffect(() => {
         function handleControls({ key }) {
@@ -25,23 +32,38 @@ export default function Controls({ prev, next }) {
         };
     }, [prev, next, navigate]);
 
-    return [prev, next].map(
-        (control, index) =>
-            control && (
-                <Link
-                    className={`hidden lg:block fixed z-50 top-1/2 -translate-y-1/2 text-lg tracking-[.25em] text-white/50 font-light hover:text-white font-mono ${
-                        index === 0 ? "left-0 -rotate-90" : "right-0 rotate-90"
-                    }`}
-                    key={control.slug.current}
-                    to={`/p/${control.slug.current}`}
-                >
+    return (
+        <div className="hidden lg:block">
+            <Link to="/">
+                <div className="fixed top-5 left-5 flex justify-center items-center">
                     <img
-                        src={index === 0 ? Prev : Next}
-                        alt={index === 0 ? "prev" : "next"}
-                        className="absolute scale-150"
+                        src={curved}
+                        alt="back-to-gallery"
+                        className="absolute animate-[spin_60s_linear_infinite]"
                     />
-                    {index === 0 ? "prev" : "next"}
+                    <img
+                        src={logo}
+                        alt="logo"
+                        className="scale-[65%] drop-shadow-md"
+                    />
+                </div>
+            </Link>
+            {prev && (
+                <Link
+                    to={`/p/${prev.slug.current}`}
+                    className="fixed left-5 top-1/2 -translate-y-1/2 bg-white/10 size-8 border border-white/10 rounded flex justify-center items-center shadow-md"
+                >
+                    <ChevronLeft className="size-4" />
                 </Link>
-            )
+            )}
+            {next && (
+                <Link
+                    to={`/p/${next.slug.current}`}
+                    className="fixed right-5 top-1/2 -translate-y-1/2 bg-white/10 size-8 border border-white/10 rounded flex justify-center items-center shadow-md"
+                >
+                    <ChevronRight className="size-4" />
+                </Link>
+            )}
+        </div>
     );
 }

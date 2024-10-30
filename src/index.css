@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,13 +8,10 @@
     user-select: none;
 }
 
+html,
 body {
-    height: 100dvh;
-    background-color: #000;
-    background-image: url(assets/images/bg.png);
-    background-position: center;
-    background-size: fill;
-    overflow-x: hidden;
+    color: white;
+    background-color: #131313;
 }
 
 ::-webkit-scrollbar {
