@@ -11,8 +11,8 @@ export default function Header() {
             </div>
             <span className="text-center text-sm italic bg-gradient-to-t from-transparent to-white pb-5 text-transparent bg-clip-text px-2">
                 black and white film photography using fomapan stock
-                <br />
-                stands for &quot;mono pentax&quot;
+                {/* <br />
+                stands for &quot;mono pentax&quot; */}
             </span>
         </div>
     );
