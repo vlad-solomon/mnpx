@@ -5,7 +5,7 @@ export default function Header() {
         <div className="flex flex-col justify-center items-center gap-2 pt-5">
             <div className="flex flex-col items-center">
                 <img src={logo} alt="logo" className="shadow-md" />
-                <span className="font-extrabold text-2xl sm:text-4xl mt-[-40px] sm:mt-[-50px] px-5 pt-5 bg-gradient-to-t from-[#131313] to-transparent">
+                <span className="font-extrabold text-2xl sm:text-4xl mt-[-40px] sm:mt-[-50px] px-5 pt-5 bg-gradient-to-t from-[#131313] to-transparent text-balance">
                     mnpx
                 </span>
             </div>

@@ -3,7 +3,7 @@ import { urlFor } from "../../sanity";
 
 export default function Grid({ data }) {
     return (
-        <div className="grid grid-cols-3 gap-[1px] sm:gap-2">
+        <div className="grid grid-cols-3 gap-[1px] sm:gap-2 sm:pb-5">
             {data.map((photo) => (
                 <Link key={photo.slug.current} to={`p/${photo.slug.current}`}>
                     <div className="bg-white/10 sm:border border-white/10 aspect-square sm:rounded overflow-hidden shadow-md">
