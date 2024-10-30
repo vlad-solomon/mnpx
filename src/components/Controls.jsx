@@ -33,7 +33,7 @@ export default function Controls({ data, slug }) {
     }, [prev, next, navigate]);
 
     return (
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
             <Link to="/">
                 <div className="fixed top-5 left-5 flex justify-center items-center">
                     <img
@@ -41,7 +41,11 @@ export default function Controls({ data, slug }) {
                         alt="back-to-gallery"
                         className="absolute animate-[spin_60s_linear_infinite]"
                     />
-                    <img src={logo} alt="logo" className="scale-[65%]" />
+                    <img
+                        src={logo}
+                        alt="logo"
+                        className="scale-[65%] drop-shadow-md"
+                    />
                 </div>
             </Link>
             {prev && (
