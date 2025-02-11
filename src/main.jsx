@@ -6,6 +6,7 @@ import "./index.css";
 
 import Home from "./pages/Home";
 import Photo from "./pages/Photo";
+import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
     {
@@ -15,6 +16,11 @@ const router = createBrowserRouter([
     {
         path: "/p/:slug",
         element: <Photo />,
+        errorElement: <NotFound />,
+    },
+    {
+        path: "*",
+        element: <NotFound />,
     },
 ]);
 
