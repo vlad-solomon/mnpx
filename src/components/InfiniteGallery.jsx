@@ -12,24 +12,32 @@ export default function InfiniteGallery({ data }) {
     const lastPos = useRef({ x: 0, y: 0 });
     const lastTime = useRef(0);
     const animationFrame = useRef(null);
-    const targetOffset = useRef({ x: GAP * 3.5, y: GAP * 3.5 });
+    const targetOffset = useRef({ x: GAP, y: GAP });
 
-    function handleMouseDown(e) {
+    function getPointerPosition(e) {
+        return e.touches
+            ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+            : { x: e.clientX, y: e.clientY };
+    }
+
+    function handlePointerDown(e) {
         setIsDragging(true);
-        lastPos.current = { x: e.clientX, y: e.clientY };
+        const pos = getPointerPosition(e);
+        lastPos.current = pos;
         lastTime.current = Date.now();
         setVelocity({ x: 0, y: 0 });
         if (animationFrame.current)
             cancelAnimationFrame(animationFrame.current);
     }
 
-    function handleMouseMove(e) {
+    function handlePointerMove(e) {
         if (!isDragging) return;
 
+        const pos = getPointerPosition(e);
         const now = Date.now();
         const dt = now - lastTime.current;
-        const dx = e.clientX - lastPos.current.x;
-        const dy = e.clientY - lastPos.current.y;
+        const dx = pos.x - lastPos.current.x;
+        const dy = pos.y - lastPos.current.y;
 
         if (dt > 0) {
             setVelocity({ x: (dx / dt) * 16, y: (dy / dt) * 16 });
@@ -40,28 +48,39 @@ export default function InfiniteGallery({ data }) {
             targetOffset.current = newOffset;
             return newOffset;
         });
-        lastPos.current = { x: e.clientX, y: e.clientY };
+        lastPos.current = pos;
         lastTime.current = now;
     }
 
-    function handleMouseUp() {
+    function handlePointerUp() {
         setIsDragging(false);
     }
 
-    function handleWheel(e) {
-        e.preventDefault();
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
 
-        // Reset velocity to stop momentum
-        setVelocity({ x: 0, y: 0 });
-        if (animationFrame.current) {
-            cancelAnimationFrame(animationFrame.current);
+        function handleWheel(e) {
+            e.preventDefault();
+
+            // Reset velocity to stop momentum
+            setVelocity({ x: 0, y: 0 });
+            if (animationFrame.current) {
+                cancelAnimationFrame(animationFrame.current);
+            }
+
+            targetOffset.current = {
+                x: targetOffset.current.x - e.deltaX,
+                y: targetOffset.current.y - e.deltaY,
+            };
         }
 
-        targetOffset.current = {
-            x: targetOffset.current.x - e.deltaX,
-            y: targetOffset.current.y - e.deltaY,
+        container.addEventListener("wheel", handleWheel, { passive: false });
+
+        return () => {
+            container.removeEventListener("wheel", handleWheel);
         };
-    }
+    }, []);
 
     useEffect(() => {
         function smoothScroll() {
@@ -117,11 +136,13 @@ export default function InfiniteGallery({ data }) {
     return (
         <div
             ref={containerRef}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-            onWheel={handleWheel}
+            onMouseDown={handlePointerDown}
+            onMouseMove={handlePointerMove}
+            onMouseUp={handlePointerUp}
+            onMouseLeave={handlePointerUp}
+            onTouchStart={handlePointerDown}
+            onTouchMove={handlePointerMove}
+            onTouchEnd={handlePointerUp}
             className="relative w-full h-full overflow-hidden cursor-grab active:cursor-grabbing select-none scroll-smooth"
         >
             {photos.map((photo) => (
