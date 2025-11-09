@@ -31,7 +31,7 @@ export default function Controls({ data, slug }) {
     }, [prev, next, navigate]);
 
     return (
-        <div className="hidden lg:block">
+        <div className="hidden lg:block z-10 fixed">
             {prev && (
                 <Link
                     to={`/p/${prev.slug.current}`}

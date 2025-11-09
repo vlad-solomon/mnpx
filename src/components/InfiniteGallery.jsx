@@ -160,7 +160,7 @@ export default function InfiniteGallery({ data }) {
             style={{ touchAction: "none" }}
         >
             {photos.map((photo) => (
-                <PhotoCard key={photo.id} photo={photo} />
+                <PhotoCard key={photo.id} photo={photo} isDragging={isDragging} />
             ))}
         </div>
     );

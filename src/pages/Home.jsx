@@ -1,4 +1,5 @@
 import { useData } from "../hooks/useData";
+import { Outlet } from "react-router-dom";
 import InfiniteGallery from "../components/InfiniteGallery";
 import Header from "../components/Header";
 
@@ -18,6 +19,7 @@ export default function Home() {
                         "radial-gradient(circle, transparent 75%, rgba(0, 0, 0, 0.8) 100%)",
                 }}
             />
+            <Outlet />
         </>
     );
 }

@@ -14,12 +14,12 @@ export default function Photo() {
     return (
         <>
             <Controls data={data} slug={slug} />
-            <div className="h-screen flex items-center justify-center">
-                <div className="bg-white/10 sm:border border-white/10 overflow-hidden sm:rounded shadow-md my-5">
+            <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-lg px-2">
+                <div className="bg-white/10 border border-white/10 overflow-hidden rounded-md shadow-lg">
                     <img
                         src={urlFor(photo.image.asset._ref)}
                         alt={slug}
-                        className="max-h-[calc(100vh-16px)]"
+                        className="max-h-[calc(100vh-100px)]"
                     />
                 </div>
             </div>
