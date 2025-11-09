@@ -1,8 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: "Mathevas";
+    src: url("/src/assets/fonts/Mathevas.woff2") format("woff2"),
+        url("/src/assets/fonts/Mathevas.woff") format("woff"),
+        url("/src/assets/fonts/Mathevas.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 
 * {
     user-select: none;

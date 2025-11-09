@@ -3,13 +3,7 @@ export default {
     content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
     theme: {
         fontFamily: {
-            mono: ["JetBrains Mono", "monospaced"],
-        },
-        extend: {
-            boxShadow: {
-                "custom-drop-shadow":
-                    "0 25px 50px 0 rgba(0,0,0,0.55), inset 0 0 100px 50px rgba(0,0,0,0.55)",
-            },
+            script: ["Mathevas", "monospace"],
         },
     },
     plugins: [],

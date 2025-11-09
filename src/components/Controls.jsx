@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import curved from "../assets/curved-text.svg";
-import logo from "../assets/logo.png";
 
 export default function Controls({ data, slug }) {
     const navigate = useNavigate();
@@ -34,20 +32,6 @@ export default function Controls({ data, slug }) {
 
     return (
         <div className="hidden lg:block">
-            <Link to="/">
-                <div className="fixed top-5 left-5 flex justify-center items-center">
-                    <img
-                        src={curved}
-                        alt="back-to-gallery"
-                        className="absolute animate-[spin_60s_linear_infinite]"
-                    />
-                    <img
-                        src={logo}
-                        alt="logo"
-                        className="scale-[65%] drop-shadow-md"
-                    />
-                </div>
-            </Link>
             {prev && (
                 <Link
                     to={`/p/${prev.slug.current}`}
