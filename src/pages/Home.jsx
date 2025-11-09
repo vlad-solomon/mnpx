@@ -1,5 +1,6 @@
 import { useData } from "../hooks/useData";
 import InfiniteGallery from "../components/InfiniteGallery";
+import Header from "../components/Header";
 
 export default function Home() {
     const { data, isLoading } = useData();
@@ -8,6 +9,7 @@ export default function Home() {
 
     return (
         <>
+            <Header />
             <InfiniteGallery data={data} />
             <div
                 className="fixed inset-0 pointer-events-none"
