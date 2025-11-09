@@ -2,9 +2,16 @@ import { useState, useEffect, useRef } from "react";
 import PhotoCard from "./PhotoCard";
 import { urlFor } from "../../sanity";
 
+const COLUMN_WIDTH = 280;
+const GAP = 16;
+const JITTER_RANGE = 30;
+const COLUMN_PRIME = 3571;
+const JITTER_COL_MULTIPLIER = 17;
+const JITTER_ROW_MULTIPLIER = 23;
+
 function InfiniteGallery({ data }) {
     const containerRef = useRef(null);
-    const [offset, setOffset] = useState({ x: 0, y: 0 });
+    const [offset, setOffset] = useState({ x: GAP, y: GAP });
     const [isDragging, setIsDragging] = useState(false);
     const [velocity, setVelocity] = useState({ x: 0, y: 0 });
     const lastPos = useRef({ x: 0, y: 0 });
@@ -27,20 +34,19 @@ function InfiniteGallery({ data }) {
         if (!data || data.length === 0) return [];
 
         const photos = [];
-        const columnWidth = 280;
-        const gap = 16;
 
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
 
-        const numColumns = Math.ceil(viewportWidth / (columnWidth + gap)) + 8;
-        const startCol = Math.floor(-currentOffset.x / (columnWidth + gap)) - 4;
+        const numColumns = Math.ceil(viewportWidth / (COLUMN_WIDTH + GAP)) + 8;
+        const startCol =
+            Math.floor(-currentOffset.x / (COLUMN_WIDTH + GAP)) - 4;
 
         // Pre-calculate heights for each photo based on aspect ratio
         const photoHeights = data.map((photoData) => {
             const dims = getImageDimensions(photoData.image.asset._ref);
             const aspectRatio = dims.height / dims.width;
-            return columnWidth * aspectRatio;
+            return COLUMN_WIDTH * aspectRatio;
         });
 
         const avgHeight =
@@ -48,36 +54,44 @@ function InfiniteGallery({ data }) {
         const photosPerColumn = Math.ceil(viewportHeight / avgHeight) + 16;
 
         for (let col = startCol; col < startCol + numColumns; col++) {
-            const columnX = col * (columnWidth + gap);
+            const columnX = col * (COLUMN_WIDTH + GAP);
             const visibleStartY = -currentOffset.y - viewportHeight;
 
             const startPhotoIndex =
-                Math.floor(visibleStartY / (avgHeight + gap)) - 8;
+                Math.floor(visibleStartY / (avgHeight + GAP)) - 8;
 
             // Create a column-specific offset that's consistent for this column
             const colOffset = ((col % data.length) + data.length) % data.length;
-            const colMultiplier = (Math.abs(col) * 3571) % data.length;
+            const colMultiplier = (Math.abs(col) * COLUMN_PRIME) % data.length;
             const finalColOffset = (colOffset + colMultiplier) % data.length;
 
             let currentY = 0;
             for (let i = 0; i < startPhotoIndex; i++) {
-                const photoIdx = ((i % data.length) + finalColOffset) % data.length;
+                const photoIdx =
+                    ((i % data.length) + finalColOffset) % data.length;
                 const baseHeight = photoHeights[photoIdx];
-                const jitterSeed = col * 17 + i * 23;
-                const jitterAmount = (jitterSeed % 30) - 15;
+                const jitterSeed =
+                    col * JITTER_COL_MULTIPLIER + i * JITTER_ROW_MULTIPLIER;
+                const jitterAmount =
+                    (jitterSeed % JITTER_RANGE) - JITTER_RANGE / 2;
                 const height = baseHeight + jitterAmount;
-                currentY += height + gap;
+                currentY += height + GAP;
             }
 
             if (startPhotoIndex < 0) {
                 currentY = 0;
                 for (let i = -1; i >= startPhotoIndex; i--) {
-                    const photoIdx = (((i % data.length) + data.length) % data.length + finalColOffset) % data.length;
+                    const photoIdx =
+                        ((((i % data.length) + data.length) % data.length) +
+                            finalColOffset) %
+                        data.length;
                     const baseHeight = photoHeights[photoIdx];
-                    const jitterSeed = col * 17 + i * 23;
-                    const jitterAmount = (jitterSeed % 30) - 15;
+                    const jitterSeed =
+                        col * JITTER_COL_MULTIPLIER + i * JITTER_ROW_MULTIPLIER;
+                    const jitterAmount =
+                        (jitterSeed % JITTER_RANGE) - JITTER_RANGE / 2;
                     const height = baseHeight + jitterAmount;
-                    currentY -= height + gap;
+                    currentY -= height + GAP;
                 }
             }
 
@@ -86,29 +100,36 @@ function InfiniteGallery({ data }) {
                 photoIndex < startPhotoIndex + photosPerColumn;
                 photoIndex++
             ) {
-                const photoIdx = (((photoIndex % data.length) + data.length) % data.length + finalColOffset) % data.length;
+                const photoIdx =
+                    ((((photoIndex % data.length) + data.length) %
+                        data.length) +
+                        finalColOffset) %
+                    data.length;
                 const photoData = data[photoIdx];
                 const baseHeight = photoHeights[photoIdx];
 
                 // Add small deterministic jitter based on position
-                const jitterSeed = col * 17 + photoIndex * 23;
-                const jitterAmount = (jitterSeed % 30) - 15; // -15 to +15px
+                const jitterSeed =
+                    col * JITTER_COL_MULTIPLIER +
+                    photoIndex * JITTER_ROW_MULTIPLIER;
+                const jitterAmount =
+                    (jitterSeed % JITTER_RANGE) - JITTER_RANGE / 2;
                 const height = baseHeight + jitterAmount;
 
                 const x = columnX + currentOffset.x;
                 const y = currentY + currentOffset.y;
 
                 if (
-                    x + columnWidth >= -gap &&
-                    x <= viewportWidth + gap &&
-                    y + height >= -gap &&
-                    y <= viewportHeight + gap
+                    x + COLUMN_WIDTH >= -GAP &&
+                    x <= viewportWidth + GAP &&
+                    y + height >= -GAP &&
+                    y <= viewportHeight + GAP
                 ) {
                     photos.push({
                         id: `${col}-${photoIndex}`,
                         x,
                         y,
-                        width: columnWidth,
+                        width: COLUMN_WIDTH,
                         height,
                         url: urlFor(photoData.image.asset._ref)
                             .width(400)
@@ -121,10 +142,10 @@ function InfiniteGallery({ data }) {
                     });
                 }
 
-                currentY += height + gap;
+                currentY += height + GAP;
 
                 if (
-                    y > viewportHeight + gap &&
+                    y > viewportHeight + GAP &&
                     photoIndex > startPhotoIndex + photosPerColumn / 2
                 ) {
                     break;
