@@ -1,15 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { motion } from "motion/react";
 
 export default function Controls({ data, slug }) {
     const navigate = useNavigate();
+    const [isVisible, setIsVisible] = useState(false);
     const prev = data.find(
         (_, index, arr) => arr[index - 1]?.slug.current === slug
     );
     const next = data.find(
         (_, index, arr) => arr[index + 1]?.slug.current === slug
     );
+
+    useEffect(() => {
+        const timer = setTimeout(() => setIsVisible(true), 300);
+        return () => clearTimeout(timer);
+    }, []);
 
     useEffect(() => {
         function handleControls({ key }) {
@@ -31,7 +38,13 @@ export default function Controls({ data, slug }) {
     }, [prev, next, navigate]);
 
     return (
-        <div className="hidden lg:block z-10 fixed">
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isVisible ? 1 : 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="hidden lg:block z-10 fixed"
+        >
             {prev && (
                 <Link
                     to={`/p/${prev.slug.current}`}
@@ -48,6 +61,6 @@ export default function Controls({ data, slug }) {
                     <ChevronRight className="size-4" />
                 </Link>
             )}
-        </div>
+        </motion.div>
     );
 }
