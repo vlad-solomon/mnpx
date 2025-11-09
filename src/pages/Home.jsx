@@ -7,8 +7,8 @@ export default function Home() {
     if (isLoading) return null;
 
     return (
-        <div className="w-screen h-screen">
+        <>
             <InfiniteGallery data={data} />
-        </div>
+        </>
     );
 }

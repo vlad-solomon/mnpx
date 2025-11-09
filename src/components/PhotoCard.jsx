@@ -5,7 +5,7 @@ function PhotoCard({ photo }) {
 
     return (
         <div
-            className="absolute rounded cursor-pointer select-none bg-white/10 sm:border border-white/10 aspect-square sm:rounded overflow-hidden shadow-md"
+            className="absolute rounded cursor-pointer select-none overflow-hidden shadow-md border border-white/10 bg-white/10"
             style={{
                 left: `${photo.x}px`,
                 top: `${photo.y}px`,
