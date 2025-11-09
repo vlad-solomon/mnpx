@@ -77,12 +77,6 @@ export default function InfiniteGallery({ data }) {
 
         container.addEventListener("wheel", handleWheel, { passive: false });
 
-        return () => {
-            container.removeEventListener("wheel", handleWheel);
-        };
-    }, []);
-
-    useEffect(() => {
         function smoothScroll() {
             setOffset((current) => {
                 const dx = targetOffset.current.x - current.x;
@@ -99,7 +93,11 @@ export default function InfiniteGallery({ data }) {
         }
 
         const rafId = requestAnimationFrame(smoothScroll);
-        return () => cancelAnimationFrame(rafId);
+
+        return () => {
+            container.removeEventListener("wheel", handleWheel);
+            cancelAnimationFrame(rafId);
+        };
     }, []);
 
     useEffect(() => {
