@@ -2,34 +2,27 @@ import { useState, useEffect, useRef } from "react";
 import PhotoCard from "./PhotoCard";
 import generatePhotos from "../utils/generatePhotos";
 
-function getColumnWidth() {
+function getLayout() {
     const width = window.innerWidth;
-    if (width < 640) return 200; // mobile
-    if (width < 1024) return 240; // tablet
-    return 280; // desktop
-}
-
-function getGap() {
-    const width = window.innerWidth;
-    if (width < 640) return 2; // mobile
-    if (width < 1024) return 5; // tablet
-    return 10; // desktop
+    if (width < 640) return { columnWidth: 200, gap: 2 }; // mobile
+    if (width < 1024) return { columnWidth: 240, gap: 5 }; // tablet
+    return { columnWidth: 280, gap: 10 }; // desktop
 }
 
 export default function InfiniteGallery({ data }) {
     const containerRef = useRef(null);
-    const [gap, setGap] = useState(getGap);
-    const [columnWidth, setColumnWidth] = useState(getColumnWidth);
-    const [offset, setOffset] = useState(() => {
-        const initialGap = getGap();
-        return { x: initialGap, y: initialGap };
+    const initialLayout = getLayout();
+    const [layout, setLayout] = useState(initialLayout);
+    const [offset, setOffset] = useState({
+        x: initialLayout.gap,
+        y: initialLayout.gap,
     });
     const [isDragging, setIsDragging] = useState(false);
     const [velocity, setVelocity] = useState({ x: 0, y: 0 });
     const lastPos = useRef({ x: 0, y: 0 });
     const lastTime = useRef(0);
     const animationFrame = useRef(null);
-    const targetOffset = useRef({ x: getGap(), y: getGap() });
+    const targetOffset = useRef({ x: initialLayout.gap, y: initialLayout.gap });
 
     function getPointerPosition(e) {
         return e.touches
@@ -74,21 +67,12 @@ export default function InfiniteGallery({ data }) {
     }
 
     useEffect(() => {
-        function handleResize() {
-            setColumnWidth(getColumnWidth());
-            setGap(getGap());
-        }
-
-        window.addEventListener("resize", handleResize);
-
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []);
-
-    useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
+
+        function handleResize() {
+            setLayout(getLayout());
+        }
 
         function handleWheel(e) {
             e.preventDefault();
@@ -105,8 +89,6 @@ export default function InfiniteGallery({ data }) {
             };
         }
 
-        container.addEventListener("wheel", handleWheel, { passive: false });
-
         function smoothScroll() {
             setOffset((current) => {
                 const dx = targetOffset.current.x - current.x;
@@ -122,9 +104,12 @@ export default function InfiniteGallery({ data }) {
             requestAnimationFrame(smoothScroll);
         }
 
+        window.addEventListener("resize", handleResize);
+        container.addEventListener("wheel", handleWheel, { passive: false });
         const rafId = requestAnimationFrame(smoothScroll);
 
         return () => {
+            window.removeEventListener("resize", handleResize);
             container.removeEventListener("wheel", handleWheel);
             cancelAnimationFrame(rafId);
         };
@@ -159,7 +144,7 @@ export default function InfiniteGallery({ data }) {
         };
     }, [isDragging, velocity]);
 
-    const photos = generatePhotos(data, offset, gap, columnWidth);
+    const photos = generatePhotos(data, offset, layout.gap, layout.columnWidth);
 
     return (
         <div
