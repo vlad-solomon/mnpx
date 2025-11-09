@@ -1,16 +1,14 @@
 import { useData } from "../hooks/useData";
-import Grid from "../components/Grid";
-import Header from "../components/Header";
+import InfiniteGallery from "../components/InfiniteGallery";
 
 export default function Home() {
     const { data, isLoading } = useData();
 
-    if (isLoading) return;
+    if (isLoading) return null;
 
     return (
-        <>
-            <Header />
-            <Grid data={data} />
-        </>
+        <div className="w-screen h-screen">
+            <InfiniteGallery data={data} />
+        </div>
     );
 }

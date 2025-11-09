@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Photo Gallery</title>
+    <meta name="description" content="A high-performance, infinite scrolling photo gallery with masonry layout">
+    <meta name="keywords" content="react, infinite scroll, photo gallery, masonry layout">
+    <meta property="og:title" content="Infinite Photo Gallery">
+    <meta property="og:description" content="A high-performance, infinite scrolling photo gallery with masonry layout">
+    <meta name="twitter:title" content="Infinite Photo Gallery">
+    <meta name="twitter:description" content="A high-performance, infinite scrolling photo gallery with masonry layout">
+
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/react@18/umd/react.production.min.js"></script>
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://resource.trickle.so/vendor_lib/unpkg/lucide-static@0.516.0/font/lucide.css" rel="stylesheet">
+
+    <style type="text/tailwindcss">
+    @layer theme {
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #f3f4f6;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+        }
+    }
+
+    @layer base {
+        body {
+            @apply bg-gray-50 text-gray-900;
+        }
+    }
+
+    @layer utilities {
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel" src="components/PhotoCard.js"></script>
+    <script type="text/babel" src="components/InfiniteGallery.js"></script>
+    <script type="text/babel" src="utils/photoData.js"></script>
+    <script type="text/babel" src="app.js"></script>
+</body>
+</html>
