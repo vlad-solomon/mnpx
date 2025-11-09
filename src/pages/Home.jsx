@@ -9,6 +9,13 @@ export default function Home() {
     return (
         <>
             <InfiniteGallery data={data} />
+            <div
+                className="fixed inset-0 pointer-events-none"
+                style={{
+                    background:
+                        "radial-gradient(circle, transparent 25%, rgba(0, 0, 0, 0.5) 100%)",
+                }}
+            />
         </>
     );
 }
