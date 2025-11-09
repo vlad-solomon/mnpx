@@ -11,14 +11,24 @@ function InfiniteGallery({ data }) {
     const lastTime = useRef(0);
     const animationFrame = useRef(null);
 
+    const getImageDimensions = (ref) => {
+        // Extract dimensions from Sanity image ref format: image-{id}-{width}x{height}-{ext}
+        const match = ref.match(/-(\d+)x(\d+)-/);
+        if (match) {
+            return {
+                width: parseInt(match[1]),
+                height: parseInt(match[2]),
+            };
+        }
+        return { width: 1, height: 1 }; // fallback
+    };
+
     const generatePhotos = (currentOffset) => {
         if (!data || data.length === 0) return [];
 
         const photos = [];
         const columnWidth = 280;
         const gap = 16;
-        const minHeight = 180;
-        const maxHeight = 450;
 
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
@@ -26,21 +36,28 @@ function InfiniteGallery({ data }) {
         const numColumns = Math.ceil(viewportWidth / (columnWidth + gap)) + 8;
         const startCol = Math.floor(-currentOffset.x / (columnWidth + gap)) - 4;
 
-        const photosPerColumn = Math.ceil(viewportHeight / minHeight) + 16;
+        // Pre-calculate heights for each photo based on aspect ratio
+        const photoHeights = data.map((photoData) => {
+            const dims = getImageDimensions(photoData.image.asset._ref);
+            const aspectRatio = dims.height / dims.width;
+            return columnWidth * aspectRatio;
+        });
+
+        const avgHeight =
+            photoHeights.reduce((sum, h) => sum + h, 0) / photoHeights.length;
+        const photosPerColumn = Math.ceil(viewportHeight / avgHeight) + 16;
 
         for (let col = startCol; col < startCol + numColumns; col++) {
             const columnX = col * (columnWidth + gap);
             const visibleStartY = -currentOffset.y - viewportHeight;
 
-            const avgHeight = (minHeight + maxHeight) / 2;
             const startPhotoIndex =
                 Math.floor(visibleStartY / (avgHeight + gap)) - 8;
 
             let currentY = 0;
             for (let i = 0; i < startPhotoIndex; i++) {
                 const seed = col * 7919 + i * 4283;
-                const height =
-                    minHeight + (Math.abs(seed) % (maxHeight - minHeight));
+                const height = photoHeights[Math.abs(seed) % data.length];
                 currentY += height + gap;
             }
 
@@ -48,8 +65,7 @@ function InfiniteGallery({ data }) {
                 currentY = 0;
                 for (let i = -1; i >= startPhotoIndex; i--) {
                     const seed = col * 7919 + i * 4283;
-                    const height =
-                        minHeight + (Math.abs(seed) % (maxHeight - minHeight));
+                    const height = photoHeights[Math.abs(seed) % data.length];
                     currentY -= height + gap;
                 }
             }
@@ -60,9 +76,8 @@ function InfiniteGallery({ data }) {
                 photoIndex++
             ) {
                 const seed = col * 7919 + photoIndex * 4283;
-                const height =
-                    minHeight + (Math.abs(seed) % (maxHeight - minHeight));
                 const photoData = data[Math.abs(seed) % data.length];
+                const height = photoHeights[Math.abs(seed) % data.length];
 
                 const x = columnX + currentOffset.x;
                 const y = currentY + currentOffset.y;
