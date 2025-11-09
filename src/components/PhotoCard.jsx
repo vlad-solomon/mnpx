@@ -11,7 +11,7 @@ function PhotoCard({ photo }) {
         >
             <img
                 src={photo.url}
-                alt={photo.title}
+                alt={photo.slug}
                 className="w-full h-full object-cover pointer-events-none"
                 loading="lazy"
                 draggable="false"

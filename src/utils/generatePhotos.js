@@ -6,8 +6,7 @@ const COLUMN_PRIME = 3571;
 const JITTER_COL_MULTIPLIER = 17;
 const JITTER_ROW_MULTIPLIER = 23;
 
-export default function generatePhotos(data, currentOffset, gap = 16) {
-    const GAP = gap;
+export default function generatePhotos(data, currentOffset, gap) {
     if (!data || data.length === 0) return [];
 
     const photos = [];
@@ -15,8 +14,8 @@ export default function generatePhotos(data, currentOffset, gap = 16) {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
-    const numColumns = Math.ceil(viewportWidth / (COLUMN_WIDTH + GAP)) + 8;
-    const startCol = Math.floor(-currentOffset.x / (COLUMN_WIDTH + GAP)) - 4;
+    const numColumns = Math.ceil(viewportWidth / (COLUMN_WIDTH + gap)) + 8;
+    const startCol = Math.floor(-currentOffset.x / (COLUMN_WIDTH + gap)) - 4;
 
     // Pre-calculate heights for each photo based on aspect ratio
     const photoHeights = data.map((photoData) => {
@@ -31,10 +30,11 @@ export default function generatePhotos(data, currentOffset, gap = 16) {
     const photosPerColumn = Math.ceil(viewportHeight / avgHeight) + 16;
 
     for (let col = startCol; col < startCol + numColumns; col++) {
-        const columnX = col * (COLUMN_WIDTH + GAP);
+        const columnX = col * (COLUMN_WIDTH + gap);
         const visibleStartY = -currentOffset.y - viewportHeight;
 
-        const startPhotoIndex = Math.floor(visibleStartY / (avgHeight + GAP)) - 8;
+        const startPhotoIndex =
+            Math.floor(visibleStartY / (avgHeight + gap)) - 8;
 
         // Create a column-specific offset that's consistent for this column
         const colOffset = ((col % data.length) + data.length) % data.length;
@@ -49,7 +49,7 @@ export default function generatePhotos(data, currentOffset, gap = 16) {
                 col * JITTER_COL_MULTIPLIER + i * JITTER_ROW_MULTIPLIER;
             const jitterAmount = (jitterSeed % JITTER_RANGE) - JITTER_RANGE / 2;
             const height = baseHeight + jitterAmount;
-            currentY += height + GAP;
+            currentY += height + gap;
         }
 
         if (startPhotoIndex < 0) {
@@ -65,7 +65,7 @@ export default function generatePhotos(data, currentOffset, gap = 16) {
                 const jitterAmount =
                     (jitterSeed % JITTER_RANGE) - JITTER_RANGE / 2;
                 const height = baseHeight + jitterAmount;
-                currentY -= height + GAP;
+                currentY -= height + gap;
             }
         }
 
@@ -83,7 +83,8 @@ export default function generatePhotos(data, currentOffset, gap = 16) {
 
             // Add small deterministic jitter based on position
             const jitterSeed =
-                col * JITTER_COL_MULTIPLIER + photoIndex * JITTER_ROW_MULTIPLIER;
+                col * JITTER_COL_MULTIPLIER +
+                photoIndex * JITTER_ROW_MULTIPLIER;
             const jitterAmount = (jitterSeed % JITTER_RANGE) - JITTER_RANGE / 2;
             const height = baseHeight + jitterAmount;
 
@@ -91,10 +92,10 @@ export default function generatePhotos(data, currentOffset, gap = 16) {
             const y = currentY + currentOffset.y;
 
             if (
-                x + COLUMN_WIDTH >= -GAP &&
-                x <= viewportWidth + GAP &&
-                y + height >= -GAP &&
-                y <= viewportHeight + GAP
+                x + COLUMN_WIDTH >= -gap &&
+                x <= viewportWidth + gap &&
+                y + height >= -gap &&
+                y <= viewportHeight + gap
             ) {
                 photos.push({
                     id: `${col}-${photoIndex}`,
@@ -103,13 +104,14 @@ export default function generatePhotos(data, currentOffset, gap = 16) {
                     width: COLUMN_WIDTH,
                     height,
                     url: urlFor(photoData.image.asset._ref).width(400).url(),
+                    slug: photoData.slug.current,
                 });
             }
 
-            currentY += height + GAP;
+            currentY += height + gap;
 
             if (
-                y > viewportHeight + GAP &&
+                y > viewportHeight + gap &&
                 photoIndex > startPhotoIndex + photosPerColumn / 2
             ) {
                 break;

@@ -4,9 +4,9 @@ import generatePhotos from "../utils/generatePhotos";
 
 const GAP = 16;
 
-export default function InfiniteGallery({ data, gap = GAP }) {
+export default function InfiniteGallery({ data }) {
     const containerRef = useRef(null);
-    const [offset, setOffset] = useState({ x: gap, y: gap });
+    const [offset, setOffset] = useState({ x: GAP, y: GAP });
     const [isDragging, setIsDragging] = useState(false);
     const [velocity, setVelocity] = useState({ x: 0, y: 0 });
     const lastPos = useRef({ x: 0, y: 0 });
@@ -68,7 +68,7 @@ export default function InfiniteGallery({ data, gap = GAP }) {
         };
     }, [isDragging, velocity]);
 
-    const photos = generatePhotos(data, offset, gap);
+    const photos = generatePhotos(data, offset, GAP);
 
     return (
         <div
