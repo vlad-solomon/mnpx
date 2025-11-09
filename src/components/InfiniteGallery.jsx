@@ -157,6 +157,7 @@ export default function InfiniteGallery({ data }) {
             onTouchMove={handlePointerMove}
             onTouchEnd={handlePointerUp}
             className="relative w-full h-full overflow-hidden cursor-grab active:cursor-grabbing select-none scroll-smooth"
+            style={{ touchAction: "none" }}
         >
             {photos.map((photo) => (
                 <PhotoCard key={photo.id} photo={photo} />
