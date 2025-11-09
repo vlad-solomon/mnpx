@@ -1,4 +1,8 @@
+import { useState } from "react";
+
 function PhotoCard({ photo }) {
+    const [isLoaded, setIsLoaded] = useState(false);
+
     return (
         <div
             className="absolute rounded cursor-pointer select-none bg-white/10 sm:border border-white/10 aspect-square sm:rounded overflow-hidden shadow-md"
@@ -7,6 +11,10 @@ function PhotoCard({ photo }) {
                 top: `${photo.y}px`,
                 width: `${photo.width}px`,
                 height: `${photo.height}px`,
+                opacity: isLoaded ? 1 : 0,
+                transform: isLoaded ? "scale(1)" : "scale(0.95)",
+                transformOrigin: "center",
+                transition: "opacity 500ms ease-out, transform 500ms ease-out",
             }}
         >
             <img
@@ -15,6 +23,7 @@ function PhotoCard({ photo }) {
                 className="w-full h-full object-cover pointer-events-none"
                 loading="lazy"
                 draggable="false"
+                onLoad={() => setIsLoaded(true)}
             />
         </div>
     );
