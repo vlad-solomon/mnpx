@@ -12,6 +12,7 @@ export default function InfiniteGallery({ data }) {
     const lastPos = useRef({ x: 0, y: 0 });
     const lastTime = useRef(0);
     const animationFrame = useRef(null);
+    const targetOffset = useRef({ x: GAP, y: GAP });
 
     function handleMouseDown(e) {
         setIsDragging(true);
@@ -34,7 +35,11 @@ export default function InfiniteGallery({ data }) {
             setVelocity({ x: (dx / dt) * 16, y: (dy / dt) * 16 });
         }
 
-        setOffset((prev) => ({ x: prev.x + dx, y: prev.y + dy }));
+        setOffset((prev) => {
+            const newOffset = { x: prev.x + dx, y: prev.y + dy };
+            targetOffset.current = newOffset;
+            return newOffset;
+        });
         lastPos.current = { x: e.clientX, y: e.clientY };
         lastTime.current = now;
     }
@@ -43,6 +48,41 @@ export default function InfiniteGallery({ data }) {
         setIsDragging(false);
     }
 
+    function handleWheel(e) {
+        e.preventDefault();
+
+        // Reset velocity to stop momentum
+        setVelocity({ x: 0, y: 0 });
+        if (animationFrame.current) {
+            cancelAnimationFrame(animationFrame.current);
+        }
+
+        targetOffset.current = {
+            x: targetOffset.current.x - e.deltaX,
+            y: targetOffset.current.y - e.deltaY,
+        };
+    }
+
+    useEffect(() => {
+        function smoothScroll() {
+            setOffset((current) => {
+                const dx = targetOffset.current.x - current.x;
+                const dy = targetOffset.current.y - current.y;
+
+                // Smooth easing
+                const ease = 0.1;
+                const newX = current.x + dx * ease;
+                const newY = current.y + dy * ease;
+
+                return { x: newX, y: newY };
+            });
+            requestAnimationFrame(smoothScroll);
+        }
+
+        const rafId = requestAnimationFrame(smoothScroll);
+        return () => cancelAnimationFrame(rafId);
+    }, []);
+
     useEffect(() => {
         if (
             !isDragging &&
@@ -50,10 +90,14 @@ export default function InfiniteGallery({ data }) {
         ) {
             const animate = () => {
                 setVelocity((prev) => ({ x: prev.x * 0.95, y: prev.y * 0.95 }));
-                setOffset((prev) => ({
-                    x: prev.x + velocity.x,
-                    y: prev.y + velocity.y,
-                }));
+                setOffset((prev) => {
+                    const newOffset = {
+                        x: prev.x + velocity.x,
+                        y: prev.y + velocity.y,
+                    };
+                    targetOffset.current = newOffset;
+                    return newOffset;
+                });
 
                 if (Math.abs(velocity.x) > 0.1 || Math.abs(velocity.y) > 0.1) {
                     animationFrame.current = requestAnimationFrame(animate);
@@ -77,7 +121,8 @@ export default function InfiniteGallery({ data }) {
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
-            className="relative w-full h-full overflow-hidden cursor-grab active:cursor-grabbing select-none"
+            onWheel={handleWheel}
+            className="relative w-full h-full overflow-hidden cursor-grab active:cursor-grabbing select-none scroll-smooth"
         >
             {photos.map((photo) => (
                 <PhotoCard key={photo.id} photo={photo} />

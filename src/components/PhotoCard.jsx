@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function PhotoCard({ photo }) {
+export default function PhotoCard({ photo }) {
     const [isLoaded, setIsLoaded] = useState(false);
 
     return (
@@ -28,5 +28,3 @@ function PhotoCard({ photo }) {
         </div>
     );
 }
-
-export default PhotoCard;
