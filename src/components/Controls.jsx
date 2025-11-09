@@ -1,17 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import curved from "../assets/curved-text.svg";
-import logo from "../assets/logo.png";
+import { motion } from "motion/react";
 
 export default function Controls({ data, slug }) {
     const navigate = useNavigate();
+    const [isVisible, setIsVisible] = useState(false);
     const prev = data.find(
         (_, index, arr) => arr[index - 1]?.slug.current === slug
     );
     const next = data.find(
         (_, index, arr) => arr[index + 1]?.slug.current === slug
     );
+
+    useEffect(() => {
+        const timer = setTimeout(() => setIsVisible(true), 300);
+        return () => clearTimeout(timer);
+    }, []);
 
     useEffect(() => {
         function handleControls({ key }) {
@@ -33,21 +38,13 @@ export default function Controls({ data, slug }) {
     }, [prev, next, navigate]);
 
     return (
-        <div className="hidden lg:block">
-            <Link to="/">
-                <div className="fixed top-5 left-5 flex justify-center items-center">
-                    <img
-                        src={curved}
-                        alt="back-to-gallery"
-                        className="absolute animate-[spin_60s_linear_infinite]"
-                    />
-                    <img
-                        src={logo}
-                        alt="logo"
-                        className="scale-[65%] drop-shadow-md"
-                    />
-                </div>
-            </Link>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isVisible ? 1 : 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="hidden lg:block z-10 fixed"
+        >
             {prev && (
                 <Link
                     to={`/p/${prev.slug.current}`}
@@ -64,6 +61,6 @@ export default function Controls({ data, slug }) {
                     <ChevronRight className="size-4" />
                 </Link>
             )}
-        </div>
+        </motion.div>
     );
 }
