@@ -1,12 +1,11 @@
 import { urlFor } from "../../sanity";
 
-const COLUMN_WIDTH = 280;
 const JITTER_RANGE = 30;
 const COLUMN_PRIME = 3571;
 const JITTER_COL_MULTIPLIER = 17;
 const JITTER_ROW_MULTIPLIER = 23;
 
-export default function generatePhotos(data, currentOffset, gap) {
+export default function generatePhotos(data, currentOffset, gap, columnWidth) {
     if (!data || data.length === 0) return [];
 
     const photos = [];
@@ -14,15 +13,15 @@ export default function generatePhotos(data, currentOffset, gap) {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
-    const numColumns = Math.ceil(viewportWidth / (COLUMN_WIDTH + gap)) + 8;
-    const startCol = Math.floor(-currentOffset.x / (COLUMN_WIDTH + gap)) - 4;
+    const numColumns = Math.ceil(viewportWidth / (columnWidth + gap)) + 8;
+    const startCol = Math.floor(-currentOffset.x / (columnWidth + gap)) - 4;
 
     // Pre-calculate heights for each photo based on aspect ratio
     const photoHeights = data.map((photoData) => {
         const dims = photoData.image.asset.metadata?.dimensions;
-        if (!dims) return COLUMN_WIDTH * 1.5; // fallback aspect ratio
+        if (!dims) return columnWidth * 1.5; // fallback aspect ratio
         const aspectRatio = dims.height / dims.width;
-        return COLUMN_WIDTH * aspectRatio;
+        return columnWidth * aspectRatio;
     });
 
     const avgHeight =
@@ -30,7 +29,7 @@ export default function generatePhotos(data, currentOffset, gap) {
     const photosPerColumn = Math.ceil(viewportHeight / avgHeight) + 32;
 
     for (let col = startCol; col < startCol + numColumns; col++) {
-        const columnX = col * (COLUMN_WIDTH + gap);
+        const columnX = col * (columnWidth + gap);
         const visibleStartY = -currentOffset.y - viewportHeight * 1.5;
 
         const startPhotoIndex =
@@ -92,7 +91,7 @@ export default function generatePhotos(data, currentOffset, gap) {
             const y = currentY + currentOffset.y;
 
             if (
-                x + COLUMN_WIDTH >= -gap &&
+                x + columnWidth >= -gap &&
                 x <= viewportWidth + gap &&
                 y + height >= -gap &&
                 y <= viewportHeight + gap
@@ -101,7 +100,7 @@ export default function generatePhotos(data, currentOffset, gap) {
                     id: `${col}-${photoIndex}`,
                     x,
                     y,
-                    width: COLUMN_WIDTH,
+                    width: columnWidth,
                     height,
                     url: urlFor(photoData.image.asset._ref).width(400).url(),
                     slug: photoData.slug.current,

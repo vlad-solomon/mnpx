@@ -2,17 +2,34 @@ import { useState, useEffect, useRef } from "react";
 import PhotoCard from "./PhotoCard";
 import generatePhotos from "../utils/generatePhotos";
 
-const GAP = 16;
+function getColumnWidth() {
+    const width = window.innerWidth;
+    if (width < 640) return 200; // mobile
+    if (width < 1024) return 240; // tablet
+    return 280; // desktop
+}
+
+function getGap() {
+    const width = window.innerWidth;
+    if (width < 640) return 2; // mobile
+    if (width < 1024) return 5; // tablet
+    return 10; // desktop
+}
 
 export default function InfiniteGallery({ data }) {
     const containerRef = useRef(null);
-    const [offset, setOffset] = useState({ x: GAP, y: GAP });
+    const [gap, setGap] = useState(getGap);
+    const [columnWidth, setColumnWidth] = useState(getColumnWidth);
+    const [offset, setOffset] = useState(() => {
+        const initialGap = getGap();
+        return { x: initialGap, y: initialGap };
+    });
     const [isDragging, setIsDragging] = useState(false);
     const [velocity, setVelocity] = useState({ x: 0, y: 0 });
     const lastPos = useRef({ x: 0, y: 0 });
     const lastTime = useRef(0);
     const animationFrame = useRef(null);
-    const targetOffset = useRef({ x: GAP, y: GAP });
+    const targetOffset = useRef({ x: getGap(), y: getGap() });
 
     function getPointerPosition(e) {
         return e.touches
@@ -55,6 +72,19 @@ export default function InfiniteGallery({ data }) {
     function handlePointerUp() {
         setIsDragging(false);
     }
+
+    useEffect(() => {
+        function handleResize() {
+            setColumnWidth(getColumnWidth());
+            setGap(getGap());
+        }
+
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -129,7 +159,7 @@ export default function InfiniteGallery({ data }) {
         };
     }, [isDragging, velocity]);
 
-    const photos = generatePhotos(data, offset, GAP);
+    const photos = generatePhotos(data, offset, gap, columnWidth);
 
     return (
         <div
