@@ -13,7 +13,7 @@ export default function Home() {
                 className="fixed inset-0 pointer-events-none"
                 style={{
                     background:
-                        "radial-gradient(circle, transparent 25%, rgba(0, 0, 0, 0.5) 100%)",
+                        "radial-gradient(circle, transparent 75%, rgba(0, 0, 0, 0.8) 100%)",
                 }}
             />
         </>
