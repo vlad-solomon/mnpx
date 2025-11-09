@@ -12,7 +12,7 @@ export default function InfiniteGallery({ data }) {
     const lastPos = useRef({ x: 0, y: 0 });
     const lastTime = useRef(0);
     const animationFrame = useRef(null);
-    const targetOffset = useRef({ x: GAP, y: GAP });
+    const targetOffset = useRef({ x: GAP * 3.5, y: GAP * 3.5 });
 
     function handleMouseDown(e) {
         setIsDragging(true);
