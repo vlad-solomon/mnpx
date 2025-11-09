@@ -8,6 +8,7 @@ export default function Home() {
     const { data, isLoading } = useData();
     const location = useLocation();
     const outlet = useOutlet();
+    const isPhotoRoute = location.pathname.startsWith("/p/");
 
     if (isLoading) return null;
 
@@ -23,7 +24,11 @@ export default function Home() {
                 }}
             />
             <AnimatePresence mode="wait">
-                {outlet && <div key={location.pathname}>{outlet}</div>}
+                {outlet && (
+                    <div key={isPhotoRoute ? "photo" : location.pathname}>
+                        {outlet}
+                    </div>
+                )}
             </AnimatePresence>
         </>
     );
