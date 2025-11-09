@@ -54,18 +54,29 @@ function InfiniteGallery({ data }) {
             const startPhotoIndex =
                 Math.floor(visibleStartY / (avgHeight + gap)) - 8;
 
+            // Create a column-specific offset that's consistent for this column
+            const colOffset = ((col % data.length) + data.length) % data.length;
+            const colMultiplier = (Math.abs(col) * 3571) % data.length;
+            const finalColOffset = (colOffset + colMultiplier) % data.length;
+
             let currentY = 0;
             for (let i = 0; i < startPhotoIndex; i++) {
-                const seed = col * 7919 + i * 4283;
-                const height = photoHeights[Math.abs(seed) % data.length];
+                const photoIdx = ((i % data.length) + finalColOffset) % data.length;
+                const baseHeight = photoHeights[photoIdx];
+                const jitterSeed = col * 17 + i * 23;
+                const jitterAmount = (jitterSeed % 30) - 15;
+                const height = baseHeight + jitterAmount;
                 currentY += height + gap;
             }
 
             if (startPhotoIndex < 0) {
                 currentY = 0;
                 for (let i = -1; i >= startPhotoIndex; i--) {
-                    const seed = col * 7919 + i * 4283;
-                    const height = photoHeights[Math.abs(seed) % data.length];
+                    const photoIdx = (((i % data.length) + data.length) % data.length + finalColOffset) % data.length;
+                    const baseHeight = photoHeights[photoIdx];
+                    const jitterSeed = col * 17 + i * 23;
+                    const jitterAmount = (jitterSeed % 30) - 15;
+                    const height = baseHeight + jitterAmount;
                     currentY -= height + gap;
                 }
             }
@@ -75,9 +86,14 @@ function InfiniteGallery({ data }) {
                 photoIndex < startPhotoIndex + photosPerColumn;
                 photoIndex++
             ) {
-                const seed = col * 7919 + photoIndex * 4283;
-                const photoData = data[Math.abs(seed) % data.length];
-                const height = photoHeights[Math.abs(seed) % data.length];
+                const photoIdx = (((photoIndex % data.length) + data.length) % data.length + finalColOffset) % data.length;
+                const photoData = data[photoIdx];
+                const baseHeight = photoHeights[photoIdx];
+
+                // Add small deterministic jitter based on position
+                const jitterSeed = col * 17 + photoIndex * 23;
+                const jitterAmount = (jitterSeed % 30) - 15; // -15 to +15px
+                const height = baseHeight + jitterAmount;
 
                 const x = columnX + currentOffset.x;
                 const y = currentY + currentOffset.y;
