@@ -27,14 +27,14 @@ export default function generatePhotos(data, currentOffset, gap) {
 
     const avgHeight =
         photoHeights.reduce((sum, h) => sum + h, 0) / photoHeights.length;
-    const photosPerColumn = Math.ceil(viewportHeight / avgHeight) + 16;
+    const photosPerColumn = Math.ceil(viewportHeight / avgHeight) + 32;
 
     for (let col = startCol; col < startCol + numColumns; col++) {
         const columnX = col * (COLUMN_WIDTH + gap);
-        const visibleStartY = -currentOffset.y - viewportHeight;
+        const visibleStartY = -currentOffset.y - viewportHeight * 1.5;
 
         const startPhotoIndex =
-            Math.floor(visibleStartY / (avgHeight + gap)) - 8;
+            Math.floor(visibleStartY / (avgHeight + gap)) - 16;
 
         // Create a column-specific offset that's consistent for this column
         const colOffset = ((col % data.length) + data.length) % data.length;
